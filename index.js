@@ -1,15 +1,16 @@
 const express = require('express');
-const { ethers } = require('ethers');
+const { ethers, JsonRpcProvider } = require('ethers');
 const QRCode = require('qrcode');
 const dotenv = require('dotenv');
-
+const hre = require('hardhat');
+const provider = new JsonRpcProvider('https://rpc.sepolia-api.lisk.com');
+console.log(provider);
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
 // Initialize Ethereum provider and contract
-const provider = new ethers.providers.JsonRpcProvider('https://rpc.sepolia-api.lisk.com');
 const wallet = new ethers.Wallet(process.env.WALLET_KEY, provider);
 const contractABI = require('./artifacts/contracts/RWAToken.sol/RWAToken.json').abi;
 const contractAddress = '0x5b3808cA145Ff92190aDf242cbAD06cef5eA08da';
@@ -18,16 +19,22 @@ const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 // Register product endpoint
 app.post('/register', async (req, res) => {
     try {
-        const { productId, description } = req.body;
+        const { productId, name, description } = req.body;
+        console.log(productId, name, description);
 
         // Register product on blockchain
-        const tx = await contract.registerProduct(tokenURI, productId, name, description);
+        const tx = await contract.registerProduct('https://metadata.com', productId, name, description, {
+            gasLimit: 500000,
+        });
+
+        // console.log(1, tx);
         const receipt = await tx.wait();
 
         // Generate QR code
-        const qrCodeData = `https://yourapp.com/verify/${productId}`;
+        const qrCodeData = `http://localhost:3000/verify/${productId}`;
         const qrCodeImage = await QRCode.toDataURL(qrCodeData);
 
+        console.log(receipt);
         res.json({
             success: true,
             message: 'Product registered successfully',

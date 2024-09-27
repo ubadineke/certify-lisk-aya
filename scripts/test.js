@@ -6,11 +6,11 @@ async function main() {
 
     // Get the deployed contract
     const RWAToken = await hre.ethers.getContractFactory('RWAToken');
-    const rwaToken = await RWAToken.attach('0x7E21b006fa2dB5b374C4A311BC074d7abB76ff8f');
+    const rwaToken = await RWAToken.attach('0x646c60fc8928924f450b0D9CaFB8a4C8c04910C3');
     // return console.log(rwaToken);
 
     // Register a product
-    const tx = await rwaToken.registerProduct('https://example.com/metadata', 'PROD006', 'ZOBO SICT', 'nice car');
+    const tx = await rwaToken.registerProduct('https://example.com/metadata', 'PROD08h', 'ZOBO SICT', 'nice car');
 
     const receipt = await tx.wait();
     console.log('Product registered. Transaction hash:', receipt.transactionHash);
