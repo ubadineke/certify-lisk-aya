@@ -80,6 +80,10 @@ npm start
 `
    This command runs the application with the production settings.
 
+## MOBILE FRONTEND APP REPO
+
+https://github.com/Immadominion/CERTIFY---THE-MVP
+
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
